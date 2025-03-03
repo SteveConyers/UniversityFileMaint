@@ -1,0 +1,206 @@
+**Free
+
+// **********************************************************************************************
+// The current code works with the CIS270P6 DSPF file.                                          *
+// Within the code there are errors that will display depending on Actions chosen.              *
+// With this program, the user can ADD, UPDATE or DELETE records from the MYINSTP file.          *
+// Data validation is used in order for a record to not be duplicated and also                  *
+// for the user to not to be allowed to enter the wrong data into certain fields.               *
+//                                                                                              *
+// Programmer: Steven Conyer Date: 2/20/2023    Date Revised:  3/10/2023                        *
+//                                                                                              *
+// **********************************************************************************************
+
+
+// ------Control Statement-----------------------------------
+Ctl-opt option(*srcStmt: *nodebugio);
+
+DCL-S Action Char(1);
+
+// ------Declare Files---------------------------------------
+DCL-F MYINSTP Usage(*Update:*Output:*Delete) Keyed;
+
+DCL-F CIS270P6  Workstn INDDS(Indicators);
+
+// ------Data Structure for Errors and Exits-----------------
+DCL-DS Indicators Len(99);
+  Exit      Ind Pos(3);  // Exit program
+  F10key    Ind Pos(10); // Used to delete
+  Cancel    Ind Pos(12); // Cancel
+  Fkey      Ind Pos(25); // Vldcmdkey
+  Adderror  Ind Pos(30); // Instructor already exists
+  Chgerror  Ind Pos(31); // Instructor not found
+  Dlterror  Ind Pos(32); // Customer not found for deletion
+  Addmode   Ind Pos(41); // Add record
+  Chgmode   Ind Pos(42); // Change record
+  Dltmode   Ind Pos(43); // Delete record
+  Inputerr  Ind Pos(90); // Invalid input error
+  INVALRANK Ind Pos(91); // Invalid input error
+  INVALSEX  Ind Pos(92); // Invalid input error
+  INVALMARS Ind Pos(93); // Invalid input error
+  INVALTEN  Ind Pos(94); // Invalid input error
+  INVALTTL  Ind Pos(95); // Invalid input error
+END-DS;
+
+// ------Main Procedure--------------------------------------
+Dow Not Exit;
+  Exfmt SCRN1;
+
+  If Action <> 'A' and Action <> 'C' and Action <> 'D';
+    Inputerr = *On;
+  ENDIF;
+
+  Select;
+  When Exit;
+    Leave;
+  When Action = 'A';
+    Exsr Addrecord;
+  When Action = 'C';
+    Exsr Chgrecord;
+  When Action = 'D';
+    Exsr Dltrecord;
+  ENDSL;
+
+ENDDO;
+
+*Inlr = *On;
+Return;
+
+// ------Add Record------------------------------------------
+Begsr Addrecord;
+  Exsr Setmode;
+  Chain(n) INSTNO MYINSTP;
+  Adderror = %found(MYINSTP);
+
+  DATEIN = *Loval; //sets date to USA format
+
+  If Not Adderror;
+    Exsr ResetData;
+    Exfmt SCRN2;
+
+    If Not Fkey;
+      DOW (RANK <> '1' and RANK <> '2' and RANK <> '3' and RANK <> '4' and Not Fkey);
+        INVALRANK = *On;
+        exfmt SCRN2;
+      ENDDO;
+
+      DOW (SEX <> 'M' and SEX <> 'F' and Not Fkey);
+        INVALSEX = *On;
+        exfmt SCRN2;
+      ENDDO;
+
+      DOW (MARSTS <> 'M' and MARSTS <> 'S' and Not Fkey);
+        INVALMARS = *On;
+        exfmt SCRN2;
+      ENDDO;
+
+      DOW (TENURE <> 'Y' and TENURE <> 'N' and Not Fkey);
+        INVALTEN = *On;
+        exfmt SCRN2;
+      ENDDO;
+      DOW (TITLE <> '1' and TITLE <> '2' and TITLE <> '3' and TITLE <> '4' and Not Fkey);
+        INVALTTL = *On;
+        exfmt SCRN2;
+      ENDDO;
+
+      HIRDAT = %DEC(DATEIN); // converts USA date format to legacy format
+
+      If Not Fkey;
+        Write INSTREC;
+        Reset Action;
+        Reset INSTNO;
+      ENDIF;
+
+    ENDIF;
+  ENDIF;
+ENDSR;
+
+// ------Change Record---------------------------------------
+Begsr Chgrecord;
+  Exsr Setmode;
+  Chain INSTNO MYINSTP;
+  Chgerror = Not %Found(MYINSTP);
+
+  DATEIN = %DATE(HIRDAT); //convert legacy date to USA date format
+
+  If Not Chgerror;
+    Exfmt SCRN2;
+
+    If Not Fkey;
+      DOW (RANK <> '1' and RANK <> '2' and RANK <> '3' and RANK <> '4' and Not Fkey);
+        INVALRANK = *On;
+        exfmt SCRN2;
+      ENDDO;
+
+      DOW (SEX <> 'M' and SEX <> 'F' and Not Fkey);
+        INVALSEX = *On;
+        exfmt SCRN2;
+      ENDDO;
+
+      DOW (MARSTS <> 'M' and MARSTS <> 'S' and Not Fkey);
+        INVALMARS = *On;
+        exfmt SCRN2;
+      ENDDO;
+
+      DOW (TENURE <> 'Y' and TENURE <> 'N' and Not Fkey);
+        INVALTEN = *On;
+        exfmt SCRN2;
+      ENDDO;
+      DOW (TITLE <> '1' and TITLE <> '2' and TITLE <> '3' and TITLE <> '4' and Not Fkey);
+        INVALTTL = *On;
+        exfmt SCRN2;
+      ENDDO;
+
+      HIRDAT = %DEC(DATEIN); // converts USA date format to legacy format
+
+      If Not Fkey;
+        Update INSTREC;
+        Reset Action;
+        Reset INSTNO;
+      ENDIF;
+
+    ENDIF;
+  ENDIF;
+ENDSR;
+
+// ------Delete Record---------------------------------------
+Begsr Dltrecord;
+  Exsr Setmode;
+  Chain INSTNO MYINSTP;
+  Dlterror = Not %found(MYINSTP);
+
+  DATEIN = %DATE(HIRDAT); //convert legacy date to USA date format
+
+  If Not Dlterror;
+    Exfmt SCRN2;
+
+    If F10key;
+      Reset Action;
+      Delete INSTREC;
+      Reset INSTNO;
+    ENDIF;
+
+  ENDIF;
+ENDSR;
+
+// ------Reset Input-----------------------------------------
+Begsr Resetdata;
+  Reset IFNAME;
+  Reset ILNAME;
+  Reset DEPT;
+  Reset SALARY;
+  Reset RANK;
+  Reset SEX;
+  Reset HIRDAT;
+  Reset MARSTS;
+  Reset DEPEND;
+  Reset TENURE;
+  Reset TITLE;
+ENDSR;
+
+// ------Mode Set--------------------------------------------
+Begsr Setmode;
+  Addmode = (Action = 'A');
+  Chgmode = (Action = 'C');
+  Dltmode = (Action = 'D');
+ENDSR; 
