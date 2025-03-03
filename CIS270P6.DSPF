@@ -1,0 +1,108 @@
+000100230301     A                                      REF(MYINSTP)
+000101230308     A                                      INDARA
+000102230303     A                                      CA03(03 'F3=Exit')
+000103230303     A                                      VLDCMDKEY(25)
+000105230227     A          R SCRN1
+000107230227     A                                  1 32'Wibaux University'
+000108230227     A                                  2 28'Instructor File Maintenance'
+000109230227     A                                  3 32'Steven Conyers'
+000110230227     A                                  6 19'Social Security number  . .'
+000111230304     A            INSTNO         9S 0B  6 47
+000112230227     A  30                                  ERRMSG('Instructor Already-
+000113230304                                             Exists' 30)
+000114230227     A  31                                  ERRMSG('No record to change' 31)
+000115230227     A  32                                  ERRMSG('No Record to delete' 32)
+000116230227     A                                  1 71DATE(*JOB)
+000117230227     A                                      EDTWRD('  /  /  ')
+000118230227     A                                  7 19'Action code . . . . . . . .'
+000119230306     A            ACTION         1   I  7 47
+000121230304     A  90                                  ERRMSG('Action Can Be A, C or D' 90)
+000122230306     A                                  8 22'A = Add record'
+000123230306     A                                  9 22'C = Change record'
+000124230306     A                                 10 22'D = Delete record'
+000125230227     A                                 13 20'Type values, then Enter to continu-
+000126230227     A                                      e'
+000128230227     A                                 20  3'F3=Exit'
+000129230306     A          R SCRN2                     CA12(12 'F12=Cancel')
+000130230306     A  43                                  CA10(10 'F10=Delete')
+000132230227     A                                  1 32'Wibaux University'
+000133230227     A                                  2 28'Instructor File Maintenance'
+000134230227     A                                  3 32'Steven Conyers'
+000135230227     A                                  5 18'Social Security number  . .'
+000136230304     A            INSTNO         9N 0O  5 47
+000137230227     A                                  1 71DATE(*JOB)
+000138230306     A                                      EDTWRD('  /  /    ')
+000139230227     A                                  6 18'First Name  . . . . . . . .'
+000140230227     A                                  8 18'Department  . . . . . . . .'
+000141230227     A                                  9 18'Salary  . . . . . . . . . .'
+000142230227     A                                  7 18'Last Name . . . . . . . . .'
+000143230227     A                                 10 18'Rank  . . . . . . . . . . .'
+000144230227     A                                 11 18'Sex . . . . . . . . . . . .'
+000145230227     A                                 12 18'Date of hire  . . . . . . .'
+000146230227     A                                 13 18'Martial status  . . . . . .'
+000147230227     A                                 14 18'Number of dependents. . . .'
+000148230227     A                                 15 18'Tenured (Y/N) . . . . . . .'
+000149230227     A                                 16 18'Preferred title . . . . . .'
+000150230304     A            IFNAME    R   10   B  6 47REFFLD(INSTREC/IFNAME F21CONYERS/MY-
+000151230304     A                                      INSTP)
+000152230306     A  43                                  DSPATR(PR)
+000153230304     A            ILNAME    R   15   B  7 47REFFLD(INSTREC/ILNAME F21CONYERS/MY-
+000154230304     A                                      INSTP)
+000155230306     A  43                                  DSPATR(PR)
+000156230304     A            DEPT      R    3   B  8 47REFFLD(INSTREC/DEPT F21CONYERS/MY-
+000157230304     A                                      INSTP)
+000158230306     A  43                                  DSPATR(PR)
+000159230304     A            SALARY    R    8S 2B  9 47REFFLD(INSTREC/SALARY F21CONYERS/MY-
+000160230304     A                                      INSTP) EDTCDE(1)
+000161230306     A  43                                  DSPATR(PR)
+000163230306     A            RANK      R    1   B 10 47REFFLD(INSTREC/RANK F21CONYERS/MY-
+000166230304     A                                      INSTP)
+000168230306     A  91                                  ERRMSG('Rank Must Be 1-4' 91)
+000169230306     A  43                                  DSPATR(PR)
+000170230306     A            SEX       R    1   B 11 47REFFLD(INSTREC/SEX F21CONYERS/MY-
+000171230304     A                                      INSTP)
+000174230306     A  43                                  DSPATR(PR)
+000175230306     A  92                                  ERRMSG('Invalid Entry. ''M'' or-
+000176230306                                              ''F''-Only' 92)
+000177230306     A            HIRDAT    R    8S  B 12 47REFFLD(INSTREC/HIRDAT F21CONYERS/MY-
+000178230308     A                                      INSTP)
+000179230308     A                                      EDTCDE(Y)
+000180230306     A  43                                  DSPATR(PR)
+000181230306     A            MARSTS    R    1   B 13 47REFFLD(INSTREC/MARSTS F21CONYERS/MY-
+000182230304     A                                      INSTP)
+000183230306     A  93                                  ERRMSG('Invalid input. ''M'' or-
+000184230306                                              ''S'' Only' 93)
+000185230306     A  43                                  DSPATR(PR)
+000186230304     A            DEPEND    R    2S 0B 14 47REFFLD(INSTREC/DEPEND F21CONYERS/MY-
+000187230304     A                                      INSTP)
+000188230306     A  43                                  DSPATR(PR)
+000189230306     A            TENURE    R    1   B 15 47REFFLD(INSTREC/TENURE F21CONYERS/MY-
+000190230304     A                                      INSTP)
+000191230306     A  94                                  ERRMSG('Invalid Entry. ''Y'' or-
+000192230306                                             ''N'' Only' 94)
+000193230306     A  43                                  DSPATR(PR)
+000194230306     A            TITLE     R    1   B 16 47REFFLD(INSTREC/TITLE F21CONYERS/MY-
+000195230304     A                                      INSTP)
+000196230306     A  95                                  ERRMSG('Title Must Be 1-4' 95)
+000197230306     A  43                                  DSPATR(PR)
+000198230308     A  41                             18 12'When finished, press Enter to'
+000199230308     A  41                             18 42'Add a New Instructor'
+000200230304     A  41                                  DSPATR(UL)
+000201230304     A  41                                  COLOR(RED)
+000210230306     A  41                             20  3'F3=Exit F12=Cancel'
+000212230308     A  42                             19 42'Change Instructor Information'
+000213230306     A  42                                  DSPATR(UL)
+000214230306     A  42                                  COLOR(RED)
+000237230308     A  43                             17 16'Press F10 key to'
+000238230308     A  43                             17 33'Delete Instructor Information'
+000239230306     A  43                                  DSPATR(UL)
+000241230306     A  43                                  COLOR(RED)
+000243230308     A  41                             19 12'When finished, press Enter to'
+000244230306     A
+000321230306     A*%%RS+<record-sequences>
+000322230306     A*%%RS+ <sequence name="Untitled">
+000323230306     A*%%RS+  <device type="display" width="80" height="24" />
+000324230306     A*%%RS+  <record-write record-format="SCRN1" />
+000325230306     A*%%RS+  <record-write record-format="SCRN2" />
+000326230306     A*%%RS+ </sequence>
+000327230306     A*%%RS </record-sequences>
